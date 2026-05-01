@@ -80,9 +80,50 @@ export async function formatCandidateWithOpenAI(article: RawArticleInput, apiKey
     }),
   });
 
-  if (!res.ok) throw new Error(`OpenAI request failed: ${res.status}`);
   const json = await res.json();
+  if (!res.ok) throw new Error(`OpenAI request failed: ${res.status}`);
+
   const outputText = json.output_text as string | undefined;
-  if (!outputText) throw new Error("OpenAI returned no structured output_text");
-  return JSON.parse(outputText) as FormattedCandidate;
+
+  const fallbackText = Array.isArray(json.output)
+    ? json.output
+        .flatMap((item: unknown) => {
+          if (!item || typeof item !== "object" || !Array.isArray((item as { content?: unknown }).content)) return [];
+          return (item as { content: unknown[] }).content;
+        })
+        .flatMap((contentItem: unknown) => {
+          if (!contentItem || typeof contentItem !== "object") return [];
+          const typedContent = contentItem as { type?: unknown; text?: unknown };
+          if ((typedContent.type === "output_text" || typedContent.type === "text") && typeof typedContent.text === "string") {
+            return [typedContent.text];
+          }
+          return [];
+        })
+        .join("\n")
+    : "";
+
+  const textToParse = outputText ?? fallbackText;
+
+  if (!textToParse) {
+    const shapeHint = {
+      has_output_text: typeof json.output_text === "string",
+      output_is_array: Array.isArray(json.output),
+      output_item_types: Array.isArray(json.output)
+        ? json.output.map((item: unknown) => (item && typeof item === "object" ? (item as { type?: unknown }).type ?? "unknown" : typeof item))
+        : [],
+    };
+    throw new Error(`OpenAI structured output text missing (status=${res.status}, shape=${JSON.stringify(shapeHint)})`);
+  }
+
+  try {
+    return JSON.parse(textToParse) as FormattedCandidate;
+  } catch (error) {
+    const shapeHint = {
+      has_output_text: typeof json.output_text === "string",
+      output_is_array: Array.isArray(json.output),
+      extracted_text_length: textToParse.length,
+    };
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`OpenAI structured output JSON parse failed (status=${res.status}, error=${errorMessage}, shape=${JSON.stringify(shapeHint)})`);
+  }
 }
