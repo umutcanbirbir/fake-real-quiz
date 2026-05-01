@@ -48,14 +48,69 @@ export default function Home() {
           <p className="mt-4 text-sm text-zinc-400 sm:text-base">
             Sharpen your digital judgment with a fast, daily challenge built for the modern web.
           </p>
-          <div className="mt-8 flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center">
-            <Link
-              href="/quiz"
-              className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-sky-300 to-violet-300 px-7 py-3 text-base font-extrabold text-zinc-950 shadow-[0_10px_35px_rgba(56,189,248,0.35)] transition hover:scale-[1.01] hover:brightness-105"
-            >
-              Start Today&apos;s Test
-            </Link>
-            <p className="text-sm text-zinc-400">No account needed. 10 quick questions.</p>
+          <div className="mt-10 grid w-full gap-4 lg:grid-cols-3">
+            <article className="relative flex min-h-[250px] flex-col rounded-2xl border border-cyan-300/55 bg-cyan-300/[0.08] p-5 shadow-[0_18px_60px_rgba(56,189,248,0.2)] backdrop-blur">
+              <div className="flex items-center justify-between gap-3">
+                <span className="rounded-full border border-cyan-200/50 bg-cyan-300/15 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-cyan-100">
+                  Available
+                </span>
+                <span className="h-2.5 w-2.5 rounded-full bg-cyan-200 shadow-[0_0_18px_rgba(103,232,249,0.9)]" />
+              </div>
+              <h2 className="mt-5 text-2xl font-black text-white">Today&rsquo;s Test</h2>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-300">
+                10 quick questions. New daily challenge.
+              </p>
+              <Link
+                href="/quiz"
+                className="mt-auto inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-sky-300 to-violet-300 px-5 py-3 text-sm font-extrabold text-zinc-950 shadow-[0_10px_35px_rgba(56,189,248,0.35)] transition hover:scale-[1.01] hover:brightness-105"
+              >
+                Start Today&rsquo;s Test
+              </Link>
+            </article>
+
+            <article className="flex min-h-[250px] flex-col rounded-2xl border border-white/10 bg-white/[0.045] p-5 opacity-80 backdrop-blur">
+              <div className="flex items-center justify-between gap-3">
+                <span className="rounded-full border border-violet-200/25 bg-violet-300/10 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-violet-100">
+                  Coming Soon
+                </span>
+                <span className="rounded-full border border-white/10 px-2 py-1 text-xs font-semibold text-zinc-500">
+                  Locked
+                </span>
+              </div>
+              <h2 className="mt-5 text-2xl font-black text-zinc-100">Hardcore Mode</h2>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-400">
+                Keep playing until your first wrong answer.
+              </p>
+              <button
+                type="button"
+                disabled
+                className="mt-auto inline-flex cursor-not-allowed items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-extrabold text-zinc-500"
+              >
+                Coming Soon
+              </button>
+            </article>
+
+            <article className="flex min-h-[250px] flex-col rounded-2xl border border-white/10 bg-white/[0.045] p-5 opacity-80 backdrop-blur">
+              <div className="flex items-center justify-between gap-3">
+                <span className="rounded-full border border-fuchsia-200/25 bg-fuchsia-300/10 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-fuchsia-100">
+                  Coming Soon
+                </span>
+                <span className="rounded-full border border-white/10 px-2 py-1 text-xs font-semibold text-zinc-500">
+                  Locked
+                </span>
+              </div>
+              <h2 className="mt-5 text-2xl font-black text-zinc-100">Online Mode</h2>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-400">
+                Play live with friends in a Kahoot-style room.
+              </p>
+              <button
+                type="button"
+                disabled
+                className="mt-auto inline-flex cursor-not-allowed items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-extrabold text-zinc-500"
+              >
+                Coming Soon
+              </button>
+            </article>
           </div>
         </section>
 
