@@ -17,6 +17,13 @@ function getPerformanceLabel(score: number) {
   return "Internet Survivor";
 }
 
+function getPerformanceDescription(score: number) {
+  if (score <= 3) return "Scams and fake content can sneak through quickly. Slow down and inspect details before trusting what you see.";
+  if (score <= 6) return "You are building stronger instincts. Keep checking sources and visual clues to level up your online judgment.";
+  if (score <= 8) return "Strong pattern recognition. You consistently catch deceptive signals across images, headlines, and messages.";
+  return "Elite detection mode. You spot manipulation fast and verify before sharing. That is true internet survival behavior.";
+}
+
 function getContentTypeLabel(question: QuizQuestion) {
   if (question.question_type === "image") return "AI Image";
   if (question.question_type === "news") return "News Check";
@@ -24,6 +31,7 @@ function getContentTypeLabel(question: QuizQuestion) {
 }
 
 export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
+  const [hasStarted, setHasStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<QuizAnswer | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
@@ -39,11 +47,42 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
     return (
       <section className="w-full max-w-3xl rounded-3xl border border-zinc-700/80 bg-zinc-900/70 p-8 text-zinc-200 shadow-2xl shadow-black/30 backdrop-blur">
         <p className="text-xs font-bold uppercase tracking-[0.22em] text-zinc-400">No Active Quiz</p>
-        <h2 className="mt-3 text-2xl font-bold text-zinc-100">No published questions yet.</h2>
-        <p className="mt-2 text-zinc-400">We are preparing the next Internet Survival Test batch. Please check back soon.</p>
-        <Link href="/" className="mt-6 inline-flex rounded-xl border border-zinc-600 px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:border-violet-300 hover:text-violet-200">
+        <h2 className="mt-3 text-2xl font-bold text-zinc-100">Today&apos;s test is not ready yet.</h2>
+        <p className="mt-2 text-zinc-400">Come back soon for the next Internet Survival Test challenge.</p>
+        <Link href="/" className="mt-6 inline-flex min-h-12 items-center rounded-xl border border-zinc-600 px-5 py-2 text-sm font-semibold text-zinc-100 transition hover:border-violet-300 hover:text-violet-200">
           Back Home
         </Link>
+      </section>
+    );
+  }
+
+  if (!hasStarted) {
+    return (
+      <section className="w-full max-w-3xl rounded-3xl border border-violet-400/25 bg-zinc-900/80 p-5 shadow-2xl shadow-black/45 backdrop-blur sm:p-8">
+        <p className="text-xs font-bold uppercase tracking-[0.22em] text-cyan-300/80">Internet Survival Test</p>
+        <h1 className="mt-3 text-3xl font-black text-zinc-100 sm:text-4xl">Today&apos;s Internet Survival Test</h1>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-300 sm:text-base">
+          10 quick questions. AI images, fake news, scam messages, and suspicious online content.
+        </p>
+
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          {[
+            "No account needed",
+            "Instant feedback",
+            "Learn the signals",
+          ].map((stat) => (
+            <div key={stat} className="rounded-2xl border border-zinc-700/70 bg-zinc-950/40 p-4 text-sm font-semibold text-zinc-100">
+              {stat}
+            </div>
+          ))}
+        </div>
+
+        <button
+          onClick={() => setHasStarted(true)}
+          className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-gradient-to-r from-cyan-300 via-sky-300 to-violet-300 px-6 py-3 text-base font-extrabold text-zinc-950 shadow-[0_10px_35px_rgba(56,189,248,0.28)] transition hover:brightness-105 sm:w-auto"
+        >
+          Start Test
+        </button>
       </section>
     );
   }
@@ -52,13 +91,17 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
 
   if (isFinished) {
     const performanceLabel = getPerformanceLabel(correctCount);
-    const shareText = `I scored ${correctCount}/10 on the Internet Survival Test. Can you beat me?`;
+    const performanceDescription = getPerformanceDescription(correctCount);
+    const shareText = `I scored ${correctCount}/10 on the Internet Survival Test. Can you beat me? https://fake-real-quiz.vercel.app/`;
 
     return (
       <section className="w-full max-w-3xl rounded-3xl border border-cyan-400/30 bg-zinc-900/80 p-6 shadow-2xl shadow-cyan-950/30 backdrop-blur sm:p-8">
         <p className="text-xs font-bold uppercase tracking-[0.22em] text-cyan-300/80">Final Result</p>
-        <h2 className="mt-3 text-4xl font-black text-zinc-100 sm:text-5xl">{correctCount}/{questionCount}</h2>
+        <h2 className="mt-3 text-4xl font-black text-zinc-100 sm:text-5xl">Score {correctCount}/{questionCount}</h2>
         <p className="mt-2 text-xl font-semibold text-zinc-300">{scorePercent}% · {performanceLabel}</p>
+        <p className="mt-4 rounded-2xl border border-zinc-700/80 bg-zinc-950/50 p-4 text-sm leading-relaxed text-zinc-300 sm:text-base">
+          {performanceDescription}
+        </p>
 
         <div className="mt-7 grid gap-3 sm:grid-cols-3">
           <button
@@ -67,24 +110,25 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
               setCopied(true);
               setTimeout(() => setCopied(false), 1600);
             }}
-            className="rounded-xl border border-cyan-300/60 bg-cyan-400/90 px-4 py-3 font-bold text-zinc-950 transition hover:bg-cyan-300"
+            className="min-h-12 rounded-xl border border-cyan-300/60 bg-cyan-400/90 px-4 py-3 font-bold text-zinc-950 transition hover:bg-cyan-300"
           >
             {copied ? "Copied!" : "Copy Share Text"}
           </button>
           <button
             onClick={() => {
+              setHasStarted(false);
               setCurrentIndex(0);
               setSelectedAnswer(null);
               setCorrectCount(0);
               setCopied(false);
             }}
-            className="rounded-xl border border-violet-300/50 bg-violet-500/90 px-4 py-3 font-bold text-white transition hover:bg-violet-400"
+            className="min-h-12 rounded-xl border border-violet-300/50 bg-violet-500/90 px-4 py-3 font-bold text-white transition hover:bg-violet-400"
           >
             Play Again
           </button>
           <Link
             href="/"
-            className="inline-flex items-center justify-center rounded-xl border border-zinc-600 bg-zinc-800/80 px-4 py-3 font-bold text-zinc-100 transition hover:border-zinc-500 hover:bg-zinc-700"
+            className="inline-flex min-h-12 items-center justify-center rounded-xl border border-zinc-600 bg-zinc-800/80 px-4 py-3 font-bold text-zinc-100 transition hover:border-zinc-500 hover:bg-zinc-700"
           >
             Back Home
           </Link>
@@ -100,14 +144,15 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
   const renderQuestionCard = () => {
     if (currentQuestion.question_type === "image" && currentQuestion.image_url) {
       return (
-        <div className="rounded-2xl border border-zinc-700/70 bg-zinc-950/40 p-3 sm:p-4">
+        <div className="rounded-2xl border border-zinc-700/70 bg-zinc-950/45 p-3 sm:p-4">
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-zinc-400">Inspect carefully</p>
           <p className="mb-3 text-sm text-zinc-300">{currentQuestion.content}</p>
           <Image
             src={currentQuestion.image_url}
             alt="Quiz prompt"
             width={1200}
             height={800}
-            className="h-auto w-full rounded-2xl border border-zinc-700/80 object-cover shadow-lg shadow-black/35"
+            className="h-auto w-full rounded-2xl border border-zinc-700/80 object-cover shadow-xl shadow-black/40"
             priority
           />
         </div>
@@ -116,25 +161,27 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
 
     if (currentQuestion.question_type === "news") {
       return (
-        <article className="rounded-2xl border border-zinc-700/80 bg-zinc-950/40 p-4 sm:p-5">
+        <article className="overflow-hidden rounded-2xl border border-zinc-700/80 bg-zinc-950/50">
           {currentQuestion.image_url ? (
             <Image
               src={currentQuestion.image_url}
               alt={currentQuestion.headline ?? "News prompt"}
               width={1200}
               height={700}
-              className="mb-4 h-auto w-full rounded-2xl border border-zinc-700/80 object-cover shadow-lg shadow-black/35"
+              className="h-auto w-full border-b border-zinc-700/80 object-cover"
             />
           ) : null}
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">{currentQuestion.source_name ?? "Unknown Source"}</p>
-          <h3 className="mt-2 text-lg font-bold leading-snug text-zinc-100">{currentQuestion.headline ?? currentQuestion.content}</h3>
-          <p className="mt-3 text-zinc-300">{currentQuestion.excerpt ?? currentQuestion.content}</p>
+          <div className="p-4 sm:p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">{currentQuestion.source_name ?? "Unknown Source"}</p>
+            <h3 className="mt-2 text-lg font-bold leading-snug text-zinc-100">{currentQuestion.headline ?? currentQuestion.content}</h3>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">{currentQuestion.excerpt ?? currentQuestion.content}</p>
+          </div>
         </article>
       );
     }
 
     return (
-      <div className="rounded-2xl border border-zinc-700/80 bg-zinc-950/40 p-5 sm:p-6">
+      <div className="rounded-2xl border border-zinc-700/80 bg-zinc-950/45 p-5 sm:p-6">
         {currentQuestion.image_url ? (
           <Image
             src={currentQuestion.image_url}
@@ -144,13 +191,13 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
             className="mb-4 h-auto w-full rounded-2xl border border-zinc-700/80 object-cover shadow-lg shadow-black/35"
           />
         ) : null}
-        <p className="text-lg leading-relaxed text-zinc-100">{currentQuestion.content}</p>
+        <p className="text-base leading-relaxed text-zinc-100 sm:text-lg">{currentQuestion.content}</p>
       </div>
     );
   };
 
   return (
-    <section className="w-full max-w-3xl rounded-3xl border border-violet-400/20 bg-zinc-900/80 p-4 shadow-2xl shadow-black/40 backdrop-blur sm:p-6">
+    <section className="w-full max-w-3xl overflow-hidden rounded-3xl border border-violet-400/20 bg-zinc-900/80 p-4 shadow-2xl shadow-black/40 backdrop-blur sm:p-6">
       <div className="rounded-2xl border border-zinc-700/70 bg-zinc-950/50 p-4">
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full border border-violet-300/60 bg-violet-400/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-violet-200">{currentQuestion.category}</span>
@@ -197,8 +244,9 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
           <p className={`text-sm font-bold uppercase tracking-[0.15em] ${isCorrect ? "text-emerald-300" : "text-rose-300"}`}>
             {isCorrect ? "Correct" : "Wrong"}
           </p>
+          <p className="mt-2 text-sm text-zinc-300">Correct answer: <span className="font-bold uppercase text-zinc-100">{currentQuestion.answer}</span></p>
           <p className="mt-3 text-zinc-100">{currentQuestion.explanation}</p>
-          <button onClick={handleNext} className="mt-4 rounded-xl bg-violet-500 px-4 py-2.5 font-semibold text-white transition hover:bg-violet-400">
+          <button onClick={handleNext} className="mt-4 min-h-11 rounded-xl bg-violet-500 px-4 py-2.5 font-semibold text-white transition hover:bg-violet-400">
             {currentIndex === questionCount - 1 ? "See Results" : "Next"}
           </button>
         </div>
