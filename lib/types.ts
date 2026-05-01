@@ -17,6 +17,12 @@ export type QuizQuestion = {
   explanation: string;
   difficulty: QuizDifficulty;
   is_published: boolean;
+  is_in_daily_pool: boolean;
+  is_in_hardcore_pool: boolean;
+  is_in_online_pool: boolean;
+  tags: string[];
+  usage_count: number;
+  archived: boolean;
   created_at: string;
   updated_at: string;
 };

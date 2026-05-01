@@ -15,9 +15,23 @@ create table if not exists public.questions (
   explanation text not null,
   difficulty text not null check (difficulty in ('easy','medium','hard')),
   is_published boolean not null default false,
+  is_in_daily_pool boolean not null default true,
+  is_in_hardcore_pool boolean not null default false,
+  is_in_online_pool boolean not null default false,
+  tags text[] not null default '{}',
+  usage_count integer not null default 0,
+  archived boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.questions
+  add column if not exists is_in_daily_pool boolean not null default true,
+  add column if not exists is_in_hardcore_pool boolean not null default false,
+  add column if not exists is_in_online_pool boolean not null default false,
+  add column if not exists tags text[] not null default '{}',
+  add column if not exists usage_count integer not null default 0,
+  add column if not exists archived boolean not null default false;
 
 alter table public.questions enable row level security;
 
