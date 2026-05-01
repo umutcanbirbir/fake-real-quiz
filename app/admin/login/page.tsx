@@ -14,7 +14,7 @@ async function login(formData: FormData) {
   });
   if (!res.ok) throw new Error("Login failed");
   const data = await res.json();
-  (await cookies()).set("sb_access_token", data.access_token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/" });
+  (await cookies()).set("sb_access_token", data.access_token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 60 * 30 });
   redirect("/admin");
 }
 
