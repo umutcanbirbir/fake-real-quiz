@@ -163,18 +163,18 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
     if (currentQuestion.question_type === "image") {
       return (
         <div className="rounded-2xl border border-zinc-700/70 bg-zinc-950/45 p-3 sm:p-4">
-          <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-zinc-400">Inspect carefully</p>
+          <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-400 sm:text-xs">Inspect carefully</p>
           {currentQuestion.image_url ? (
             <Image
               src={currentQuestion.image_url}
               alt={getQuestionImageAlt(currentQuestion)}
               width={1200}
               height={800}
-              className="h-auto w-full rounded-2xl border border-zinc-700/80 object-cover shadow-xl shadow-black/40"
+              className="h-[220px] w-full rounded-2xl border border-zinc-700/80 object-cover shadow-xl shadow-black/40 md:h-[280px] lg:h-[320px]"
               priority
             />
           ) : null}
-          <p className="mt-3 text-sm text-zinc-300">{currentQuestion.content}</p>
+          <p className="mt-2 text-sm leading-snug text-zinc-300">{currentQuestion.content}</p>
         </div>
       );
     }
@@ -188,53 +188,53 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
               alt={getQuestionImageAlt(currentQuestion)}
               width={1200}
               height={700}
-              className="h-auto w-full border-b border-zinc-700/80 object-cover"
+              className="h-[220px] w-full border-b border-zinc-700/80 object-cover md:h-[280px] lg:h-[320px]"
             />
           ) : null}
-          <div className="p-4 sm:p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">{currentQuestion.source_name ?? "Unknown Source"}</p>
-            <h3 className="mt-2 text-lg font-bold leading-snug text-zinc-100">{currentQuestion.headline ?? currentQuestion.content}</h3>
-            <p className="mt-3 text-sm leading-relaxed text-zinc-300 sm:text-base">{currentQuestion.excerpt ?? currentQuestion.content}</p>
+          <div className="p-3 sm:p-4">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500 sm:text-xs">{currentQuestion.source_name ?? "Unknown Source"}</p>
+            <h3 className="mt-1.5 line-clamp-2 text-base font-bold leading-snug text-zinc-100 sm:text-lg">{currentQuestion.headline ?? currentQuestion.content}</h3>
+            <p className="mt-2 line-clamp-3 text-sm leading-snug text-zinc-300 sm:leading-relaxed">{currentQuestion.excerpt ?? currentQuestion.content}</p>
           </div>
         </article>
       );
     }
 
     return (
-      <div className="rounded-2xl border border-zinc-700/80 bg-zinc-950/45 p-5 sm:p-6">
+      <div className="rounded-2xl border border-zinc-700/80 bg-zinc-950/45 p-3.5 sm:p-4">
         {currentQuestion.image_url ? (
           <Image
             src={currentQuestion.image_url}
             alt={getQuestionImageAlt(currentQuestion)}
             width={1200}
             height={700}
-            className="mb-4 h-auto w-full rounded-2xl border border-zinc-700/80 object-cover shadow-lg shadow-black/35"
+            className="mb-3 h-[180px] w-full rounded-2xl border border-zinc-700/80 object-cover shadow-lg shadow-black/35 sm:h-[200px] md:h-[220px]"
           />
         ) : null}
-        <p className="text-base leading-relaxed text-zinc-100 sm:text-lg">{currentQuestion.content}</p>
+        <p className="text-sm leading-relaxed text-zinc-100 sm:text-base">{currentQuestion.content}</p>
       </div>
     );
   };
 
-  return (
-    <section className="w-full max-w-3xl overflow-hidden rounded-3xl border border-violet-400/20 bg-zinc-900/80 p-4 shadow-2xl shadow-black/40 backdrop-blur sm:p-6">
-      <div className="rounded-2xl border border-zinc-700/70 bg-zinc-950/50 p-4">
+    return (
+      <section className="w-full max-w-3xl overflow-hidden rounded-3xl border border-violet-400/20 bg-zinc-900/80 p-3 shadow-2xl shadow-black/40 backdrop-blur sm:p-4">
+      <div className="rounded-2xl border border-zinc-700/70 bg-zinc-950/50 p-3 sm:p-3.5">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-violet-300/60 bg-violet-400/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-violet-200">{currentQuestion.category}</span>
-          <span className="rounded-full border border-zinc-500/80 bg-zinc-800/90 px-3 py-1 text-xs font-bold uppercase tracking-wide text-zinc-200">{getContentTypeLabel(currentQuestion)}</span>
+          <span className="rounded-full border border-violet-300/60 bg-violet-400/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-violet-200 sm:text-xs">{currentQuestion.category}</span>
+          <span className="rounded-full border border-zinc-500/80 bg-zinc-800/90 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-zinc-200 sm:text-xs">{getContentTypeLabel(currentQuestion)}</span>
         </div>
-        <div className="mt-4 flex items-center justify-between text-sm text-zinc-300">
+        <div className="mt-2.5 flex items-center justify-between text-xs text-zinc-300 sm:text-sm">
           <span className="font-semibold">Question {currentIndex + 1}/{questionCount}</span>
           <span>{progressPercent}% Complete</span>
         </div>
-        <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-zinc-800">
+        <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-zinc-800">
           <div className="h-full rounded-full bg-gradient-to-r from-violet-400 via-cyan-300 to-emerald-300 transition-all duration-500" style={{ width: `${progressPercent}%` }} />
         </div>
       </div>
 
-      <div className="mt-5">{renderQuestionCard()}</div>
+      <div className="mt-3">{renderQuestionCard()}</div>
 
-      <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
         {(["real", "fake"] as const).map((choice) => {
           const isSelected = selectedAnswer === choice;
           const isAnswer = currentQuestion.answer === choice;
@@ -251,7 +251,7 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
               key={choice}
               onClick={() => handleAnswer(choice)}
               disabled={Boolean(selectedAnswer)}
-              className={`min-h-14 rounded-2xl border px-5 py-4 text-base font-extrabold uppercase tracking-wide transition-all duration-200 sm:min-h-16 ${resolvedState} ${!selectedAnswer ? "hover:-translate-y-0.5" : ""}`}
+              className={`min-h-12 rounded-2xl border px-4 py-3 text-sm font-extrabold uppercase tracking-wide transition-all duration-200 sm:min-h-14 sm:text-base ${resolvedState} ${!selectedAnswer ? "hover:-translate-y-0.5" : ""}`}
             >
               {choice}
             </button>
@@ -260,13 +260,13 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
       </div>
 
       {selectedAnswer && (
-        <div className={`mt-5 rounded-2xl border p-4 ${isCorrect ? "border-emerald-300/60 bg-emerald-500/10" : "border-rose-300/60 bg-rose-500/10"}`}>
+        <div className={`mt-3 rounded-2xl border p-3 sm:p-4 ${isCorrect ? "border-emerald-300/60 bg-emerald-500/10" : "border-rose-300/60 bg-rose-500/10"}`}>
           <p className={`text-sm font-bold uppercase tracking-[0.15em] ${isCorrect ? "text-emerald-300" : "text-rose-300"}`}>
             {isCorrect ? "Correct" : "Wrong"}
           </p>
           <p className="mt-2 text-sm text-zinc-300">Correct answer: <span className="font-bold uppercase text-zinc-100">{currentQuestion.answer}</span></p>
-          <p className="mt-3 text-zinc-100">{currentQuestion.explanation}</p>
-          <button onClick={handleNext} className="mt-4 min-h-11 rounded-xl bg-violet-500 px-4 py-2.5 font-semibold text-white transition hover:bg-violet-400">
+          <p className="mt-2 text-sm text-zinc-100 sm:text-base">{currentQuestion.explanation}</p>
+          <button onClick={handleNext} className="mt-3 min-h-10 rounded-xl bg-violet-500 px-4 py-2 font-semibold text-white transition hover:bg-violet-400">
             {currentIndex === questionCount - 1 ? "See Results" : "Next"}
           </button>
         </div>
