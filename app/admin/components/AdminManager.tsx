@@ -23,12 +23,6 @@ const blank: FormState = {
   tags_text: "",
 };
 
-function getContentTypeLabel(questionType: QuestionType) {
-  if (questionType === "image") return "AI Image";
-  if (questionType === "news") return "News Check";
-  return "Text Check";
-}
-
 function toFormState(question: QuizQuestion): FormState {
   return { ...question, tags_text: (question.tags ?? []).join(", ") };
 }
@@ -150,9 +144,29 @@ export default function AdminManager({ initial }: { initial: QuizQuestion[] }) {
         <section className="w-full rounded-3xl border border-violet-400/20 bg-zinc-900/80 p-4 shadow-2xl shadow-black/40 backdrop-blur sm:p-6">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-cyan-300/80">Preview mode</p>
           <div className="mt-4 rounded-2xl border border-zinc-700/70 bg-zinc-950/50 p-4">
+            {previewQuestion.image_url ? (
+              <Image src={previewQuestion.image_url} alt="Preview image" width={900} height={520} className="mb-4 h-48 w-full rounded-xl border border-zinc-700 object-cover" unoptimized />
+            ) : (
+              <p className="mb-4 rounded-xl border border-dashed border-zinc-700 bg-zinc-900/60 px-3 py-8 text-center text-sm text-zinc-500">No image URL set yet.</p>
+            )}
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-violet-300/60 bg-violet-400/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-violet-200">{previewQuestion.category}</span>
-              <span className="rounded-full border border-zinc-500/80 bg-zinc-800/90 px-3 py-1 text-xs font-bold uppercase tracking-wide text-zinc-200">{getContentTypeLabel(previewQuestion.question_type)}</span>
+              <span className="rounded-full border border-zinc-500/80 bg-zinc-800/90 px-3 py-1 text-xs font-bold uppercase tracking-wide text-zinc-200">
+                {previewQuestion.question_type === "news" ? "NEWS CHECK" : previewQuestion.question_type === "image" ? "IMAGE CHECK" : "TEXT CHECK"}
+              </span>
+            </div>
+            <div className="mt-4 space-y-3">
+              {previewQuestion.question_type === "news" ? (
+                <>
+                  <p className="text-sm uppercase tracking-wide text-zinc-400">{previewQuestion.source_name || "Source name preview appears here."}</p>
+                  <h3 className="text-xl font-semibold text-zinc-100">{previewQuestion.headline || "Headline preview appears here."}</h3>
+                  <p className="text-sm leading-relaxed text-zinc-300">{previewQuestion.excerpt || "Excerpt preview appears here."}</p>
+                </>
+              ) : (
+                <p className="text-base leading-relaxed text-zinc-200">
+                  {previewQuestion.content || (previewQuestion.question_type === "image" ? "Image question prompt preview appears here." : "Text question preview appears here.")}
+                </p>
+              )}
             </div>
           </div>
         </section>
