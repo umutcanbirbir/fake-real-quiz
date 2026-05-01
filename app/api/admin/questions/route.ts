@@ -1,13 +1,27 @@
 import { NextResponse } from "next/server";
+import { env } from "@/lib/env";
 import { adminDb } from "@/lib/supabase-server";
 import { requireAdmin } from "@/lib/admin-auth";
+
+
+function normalizeImageUrl(imageUrl: unknown) {
+  if (!imageUrl) return null;
+  const value = String(imageUrl).trim();
+  if (!value) return null;
+  if (value.startsWith("http://") || value.startsWith("https://")) return value;
+  const normalizedPath = value
+    .replace(/^\/+/, "")
+    .replace(/^storage\/v1\/object\/public\/question-images\//, "")
+    .replace(/^question-images\//, "");
+  return `${env.supabaseUrl}/storage/v1/object/public/question-images/${normalizedPath}`;
+}
 
 function bodyToPayload(body: Record<string, unknown>) {
   return {
     category: String(body.category ?? "").trim(),
     question_type: String(body.question_type ?? "text"),
     content: String(body.content ?? "").trim(),
-    image_url: body.image_url ? String(body.image_url) : null,
+    image_url: normalizeImageUrl(body.image_url),
     headline: body.headline ? String(body.headline) : null,
     excerpt: body.excerpt ? String(body.excerpt) : null,
     source_name: body.source_name ? String(body.source_name) : null,
