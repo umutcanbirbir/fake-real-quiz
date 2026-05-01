@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "import:candidates": "node --env-file=.env.local --experimental-strip-types --experimental-specifier-resolution=node scripts/import-candidates.ts"
   },
   "dependencies": {
     "next": "16.2.4",
