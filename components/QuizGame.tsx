@@ -117,6 +117,15 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
     if (currentQuestion.question_type === "news") {
       return (
         <article className="rounded-2xl border border-zinc-700/80 bg-zinc-950/40 p-4 sm:p-5">
+          {currentQuestion.image_url ? (
+            <Image
+              src={currentQuestion.image_url}
+              alt={currentQuestion.headline ?? "News prompt"}
+              width={1200}
+              height={700}
+              className="mb-4 h-auto w-full rounded-2xl border border-zinc-700/80 object-cover shadow-lg shadow-black/35"
+            />
+          ) : null}
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">{currentQuestion.source_name ?? "Unknown Source"}</p>
           <h3 className="mt-2 text-lg font-bold leading-snug text-zinc-100">{currentQuestion.headline ?? currentQuestion.content}</h3>
           <p className="mt-3 text-zinc-300">{currentQuestion.excerpt ?? currentQuestion.content}</p>
@@ -126,6 +135,15 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
 
     return (
       <div className="rounded-2xl border border-zinc-700/80 bg-zinc-950/40 p-5 sm:p-6">
+        {currentQuestion.image_url ? (
+          <Image
+            src={currentQuestion.image_url}
+            alt="Question visual"
+            width={1200}
+            height={700}
+            className="mb-4 h-auto w-full rounded-2xl border border-zinc-700/80 object-cover shadow-lg shadow-black/35"
+          />
+        ) : null}
         <p className="text-lg leading-relaxed text-zinc-100">{currentQuestion.content}</p>
       </div>
     );
