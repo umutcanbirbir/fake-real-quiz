@@ -136,7 +136,6 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
       <div className="rounded-2xl border border-zinc-700/70 bg-zinc-950/50 p-4">
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full border border-violet-300/60 bg-violet-400/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-violet-200">{currentQuestion.category}</span>
-          <span className="rounded-full border border-cyan-300/60 bg-cyan-400/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-cyan-200">{currentQuestion.difficulty}</span>
           <span className="rounded-full border border-zinc-500/80 bg-zinc-800/90 px-3 py-1 text-xs font-bold uppercase tracking-wide text-zinc-200">{getContentTypeLabel(currentQuestion)}</span>
         </div>
         <div className="mt-4 flex items-center justify-between text-sm text-zinc-300">
