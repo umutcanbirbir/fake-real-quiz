@@ -30,6 +30,24 @@ function getContentTypeLabel(question: QuizQuestion) {
   return "Text Check";
 }
 
+function getQuestionImageAlt(question: QuizQuestion) {
+  if (question.question_type === "news") {
+    return question.headline
+      ? `News question image: ${question.headline}`
+      : "News question image";
+  }
+
+  if (question.question_type === "image") {
+    return question.content
+      ? `Image question prompt: ${question.content}`
+      : "Image question prompt";
+  }
+
+  return question.content
+    ? `Question reference image: ${question.content}`
+    : "Question reference image";
+}
+
 export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
   const [hasStarted, setHasStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -142,19 +160,21 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
   const isCorrect = selectedAnswer === currentQuestion.answer;
 
   const renderQuestionCard = () => {
-    if (currentQuestion.question_type === "image" && currentQuestion.image_url) {
+    if (currentQuestion.question_type === "image") {
       return (
         <div className="rounded-2xl border border-zinc-700/70 bg-zinc-950/45 p-3 sm:p-4">
           <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-zinc-400">Inspect carefully</p>
-          <p className="mb-3 text-sm text-zinc-300">{currentQuestion.content}</p>
-          <Image
-            src={currentQuestion.image_url}
-            alt="Quiz prompt"
-            width={1200}
-            height={800}
-            className="h-auto w-full rounded-2xl border border-zinc-700/80 object-cover shadow-xl shadow-black/40"
-            priority
-          />
+          {currentQuestion.image_url ? (
+            <Image
+              src={currentQuestion.image_url}
+              alt={getQuestionImageAlt(currentQuestion)}
+              width={1200}
+              height={800}
+              className="h-auto w-full rounded-2xl border border-zinc-700/80 object-cover shadow-xl shadow-black/40"
+              priority
+            />
+          ) : null}
+          <p className="mt-3 text-sm text-zinc-300">{currentQuestion.content}</p>
         </div>
       );
     }
@@ -165,7 +185,7 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
           {currentQuestion.image_url ? (
             <Image
               src={currentQuestion.image_url}
-              alt={currentQuestion.headline ?? "News prompt"}
+              alt={getQuestionImageAlt(currentQuestion)}
               width={1200}
               height={700}
               className="h-auto w-full border-b border-zinc-700/80 object-cover"
@@ -185,7 +205,7 @@ export default function QuizGame({ questions }: { questions: QuizQuestion[] }) {
         {currentQuestion.image_url ? (
           <Image
             src={currentQuestion.image_url}
-            alt="Question visual"
+            alt={getQuestionImageAlt(currentQuestion)}
             width={1200}
             height={700}
             className="mb-4 h-auto w-full rounded-2xl border border-zinc-700/80 object-cover shadow-lg shadow-black/35"
