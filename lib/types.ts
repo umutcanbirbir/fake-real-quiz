@@ -26,3 +26,26 @@ export type QuizQuestion = {
   created_at: string;
   updated_at: string;
 };
+
+export type CandidateStatus = "pending" | "approved" | "rejected";
+
+export type QuestionCandidate = {
+  id: string;
+  source_name: string | null;
+  source_url: string | null;
+  raw_title: string | null;
+  raw_summary: string | null;
+  suggested_category: string | null;
+  suggested_question_type: QuestionType | null;
+  suggested_content: string | null;
+  suggested_headline: string | null;
+  suggested_excerpt: string | null;
+  suggested_answer: QuizAnswer | null;
+  suggested_explanation: string | null;
+  suggested_difficulty: QuizDifficulty | null;
+  suggested_tags: string[];
+  suggested_image_prompt: string | null;
+  status: CandidateStatus;
+  created_at: string;
+  updated_at: string;
+};
