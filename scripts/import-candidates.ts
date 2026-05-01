@@ -1,4 +1,4 @@
-import { formatCandidateWithOpenAI, type RawArticleInput } from "../lib/ai/formatCandidate.ts";
+import { formatCandidateWithOpenAI, type RawArticleInput } from "../lib/ai/formatCandidate";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
