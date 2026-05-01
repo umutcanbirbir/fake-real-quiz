@@ -45,4 +45,37 @@ create policy "no public insert" on public.questions for insert to anon, authent
 create policy "no public update" on public.questions for update to anon, authenticated using (false);
 create policy "no public delete" on public.questions for delete to anon, authenticated using (false);
 
+create table if not exists public.question_candidates (
+  id uuid primary key default gen_random_uuid(),
+  source_name text,
+  source_url text,
+  raw_title text,
+  raw_summary text,
+  suggested_category text,
+  suggested_question_type text check (suggested_question_type in ('text','image','news')),
+  suggested_content text,
+  suggested_headline text,
+  suggested_excerpt text,
+  suggested_answer text check (suggested_answer in ('real','fake')),
+  suggested_explanation text,
+  suggested_difficulty text check (suggested_difficulty in ('easy','medium','hard')),
+  suggested_tags text[] not null default '{}',
+  suggested_image_prompt text,
+  status text not null default 'pending' check (status in ('pending','approved','rejected')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.question_candidates enable row level security;
+
+drop policy if exists "no public select question candidates" on public.question_candidates;
+drop policy if exists "no public insert question candidates" on public.question_candidates;
+drop policy if exists "no public update question candidates" on public.question_candidates;
+drop policy if exists "no public delete question candidates" on public.question_candidates;
+
+create policy "no public select question candidates" on public.question_candidates for select to anon, authenticated using (false);
+create policy "no public insert question candidates" on public.question_candidates for insert to anon, authenticated with check (false);
+create policy "no public update question candidates" on public.question_candidates for update to anon, authenticated using (false);
+create policy "no public delete question candidates" on public.question_candidates for delete to anon, authenticated using (false);
+
 insert into storage.buckets (id, name, public) values ('question-images', 'question-images', true) on conflict (id) do nothing;
