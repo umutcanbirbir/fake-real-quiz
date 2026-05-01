@@ -17,7 +17,7 @@ export default async function AdminPage() {
   return (
     <main className="min-h-screen bg-zinc-950 p-4 text-zinc-100">
       <h1 className="text-2xl font-bold">Admin CMS</h1>
-      <p className="mt-1 text-sm text-zinc-400">Create, edit, publish, and delete quiz questions.</p>
+      <p className="mt-1 text-sm text-zinc-400">Create, edit, publish, and manage reusable library questions.</p>
       <div className="mt-4">
         <AdminManager initial={questions} />
       </div>

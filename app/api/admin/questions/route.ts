@@ -16,6 +16,12 @@ function normalizeImageUrl(imageUrl: unknown) {
   return `${env.supabaseUrl}/storage/v1/object/public/question-images/${normalizedPath}`;
 }
 
+function normalizeTags(tags: unknown): string[] {
+  if (Array.isArray(tags)) return tags.map((tag) => String(tag).trim()).filter(Boolean);
+  if (!tags) return [];
+  return String(tags).split(",").map((tag) => tag.trim()).filter(Boolean);
+}
+
 function bodyToPayload(body: Record<string, unknown>) {
   return {
     category: String(body.category ?? "").trim(),
@@ -31,6 +37,11 @@ function bodyToPayload(body: Record<string, unknown>) {
     explanation: String(body.explanation ?? "").trim(),
     difficulty: String(body.difficulty ?? "easy"),
     is_published: Boolean(body.is_published),
+    is_in_daily_pool: body.is_in_daily_pool === undefined ? true : Boolean(body.is_in_daily_pool),
+    is_in_hardcore_pool: Boolean(body.is_in_hardcore_pool),
+    is_in_online_pool: Boolean(body.is_in_online_pool),
+    tags: normalizeTags(body.tags),
+    archived: Boolean(body.archived),
   };
 }
 
