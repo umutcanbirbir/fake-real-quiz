@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "import:candidates": "node --env-file=.env.local --experimental-strip-types scripts/import-candidates.ts"
+    "import:candidates": "node --env-file=.env.local --import tsx scripts/import-candidates.ts"
   },
   "dependencies": {
     "next": "16.2.4",
@@ -22,6 +22,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
